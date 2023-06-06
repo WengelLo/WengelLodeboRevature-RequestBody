@@ -1,5 +1,7 @@
 
 
+import org.eclipse.jetty.server.Authentication.User;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
 
@@ -12,7 +14,7 @@ public class JavalinSingleton {
 
     public static Javalin getInstance(){
         Javalin app = Javalin.create();
-        ObjectMapper om = new ObjectMapper();
+        //ObjectMapper om = new ObjectMapper();
         
         /**
          * problem1: retrieve the song object from the request body...
@@ -23,6 +25,10 @@ public class JavalinSingleton {
         app.post("/echo", ctx -> {
             
             //implement logic here
+            String jsonString = ctx.body();
+            ObjectMapper om = new ObjectMapper();
+            Song song = om.readValue(jsonString, Song.class);
+            ctx.json(song);  
                 
         });
 
@@ -36,7 +42,13 @@ public class JavalinSingleton {
         app.post("/changeartisttobeatles", ctx -> {
 
             //implement logic here
-               
+            String jsonString = ctx.body();
+            ObjectMapper om = new ObjectMapper();
+            Song song = om.readValue(jsonString, Song.class);
+            //ctx.json(song);  
+                
+            song.setArtistName("Beatles");
+            ctx.json(song);
         });
 
 
